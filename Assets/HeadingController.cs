@@ -21,7 +21,7 @@ namespace DKH
         {
             if (!worldSpace)
             {
-                heading = Camera.main.transform.InverseTransformPoint(direction);
+                //heading = Camera.main.transform.InverseTransformPoint(direction);
             }
             else
             {

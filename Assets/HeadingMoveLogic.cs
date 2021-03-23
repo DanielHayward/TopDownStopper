@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DKH
 {
-    public class HeadingMoveLogic : MoveLogicElement, IHeadingLogic
+    public class HeadingMoveLogic : MoveLogicElement, IHeadingLogic, IPoolableComponent
     {
         public Vector3 Heading => heading;
         private Vector3 heading = Vector3.zero;
@@ -46,12 +46,30 @@ namespace DKH
         {
             if (!worldSpace)
             {
-                heading = Camera.main.transform.InverseTransformPoint(direction);
+              //  heading = Camera.main.transform.InverseTransformPoint(direction);
             }
             else
             {
                 heading = direction;
             }
+        }
+
+        public void InitialSpawn()
+        {
+
+        }
+
+        public void Respawn()
+        {
+
+        }
+
+        public void Despawn()
+        {
+            accelTime = 0;
+            velocity = Vector3.zero;
+            heading = Vector3.zero;
+            velocitySmoothing = Vector3.zero;
         }
     }
 }

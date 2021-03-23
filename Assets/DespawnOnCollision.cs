@@ -2,17 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DespawnOnCollision : MonoBehaviour
+namespace DKH
 {
-    // Start is called before the first frame update
-    void Start()
+    public class DespawnOnCollision : MonoBehaviour, ISourceUser
     {
-        
-    }
+        private Spawnable spawnable;
+        public void SetSource(GameObject source)
+        {
+            spawnable = GetComponent<Spawnable>();
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+        private void OnCollisionEnter(Collision collision)
+        {
+            spawnable.Off();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            spawnable.Off();
+        }
+    } 
 }
+
