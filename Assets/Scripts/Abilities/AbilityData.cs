@@ -40,7 +40,7 @@ namespace DKH
 
         private List<GameObject> targetSet = new List<GameObject>();
         private Targeter targeter;
-        public float cooldownTimer = 0;
+        [HideInInspector] public float cooldownTimer = 0;
 
         public void SetSource(GameObject source)
         {
@@ -62,6 +62,7 @@ namespace DKH
                     targeter = IdSO.FindComponents<Targeter>(source, data.targeterID)[0];
 
                 }
+                cooldownTimer = 0;
             }
         }
 

@@ -20,6 +20,6 @@ MonoBehaviour:
   targeterID: {fileID: 0}
   targetMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 128
   maxTargets: 3
   maxDistance: 10
