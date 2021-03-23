@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace DKH
 {
+    public enum SpawnType
+    {
+        sourceHeading,
+        sourceToTarget,
+        targetToSource
+    }
+
     [CreateAssetMenu(menuName = "ScriptableObjects/Commands/Spawn")]
     public class SpawningCommandData : CommandDataSO
     {
@@ -11,8 +18,8 @@ namespace DKH
         public SpawnableDataSO spawnable;
         public int maxInstances = 9999;
         public Vector3 positionOffset;
-        public bool directionBasedOnHeading = false;
         public bool offsetBasedOnHeading = false;
+        public SpawnType spawnType;
 
         protected override void AddTarget(GameObject target)
         {
@@ -21,11 +28,14 @@ namespace DKH
                 return;
             }
             IHeadingLogic[] headingLogic = IdSO.FindComponents<IHeadingLogic>(target, myHeadingLogicID);
-            if (headingLogic == null)
+            if (headingLogic.Length == 0)
             {
-                Debug.LogError("Cannot issue movement command to object without a move logic class.");
+                previousTargets.Add(target, new SpawningCommand(target.transform, null, this));
             }
-            previousTargets.Add(target, new SpawningCommand(target.transform, headingLogic[0], this));
+            else
+            {
+                previousTargets.Add(target, new SpawningCommand(target.transform, headingLogic[0], this));
+            }
         }
         protected override void AddTarget(Vector3 target)
         {
@@ -66,10 +76,24 @@ namespace DKH
             }
             if ((data.firePeroids & (TriggerPeroids)(1 << stage)) != TriggerPeroids.None)
             {
-                PooledObject po = SpawningManager.Spawn(spawnData.spawnable, location + spawnData.positionOffset, spawnData.maxInstances);
-                if (spawnData.directionBasedOnHeading && moveLogic != null)
+                PooledObject po;
+                switch (spawnData.spawnType)
                 {
-                    po.GetComponent<IHeadingLogic>().SetHeading(moveLogic.Heading);
+                    case SpawnType.sourceHeading:
+                        po = SpawningManager.Spawn(spawnData.spawnable, location + spawnData.positionOffset, spawnData.maxInstances);
+                        if (moveLogic != null)
+                        {
+                            po.GetComponent<IHeadingLogic>().SetHeading(moveLogic.Heading);
+                        }
+                        break;
+                    case SpawnType.sourceToTarget:
+                        po = SpawningManager.Spawn(spawnData.spawnable, source.transform.position + spawnData.positionOffset, spawnData.maxInstances);
+                        po.GetComponent<IHeadingLogic>().SetHeading(target.position - source.transform.position);
+                        break;
+                    case SpawnType.targetToSource:
+                        po = SpawningManager.Spawn(spawnData.spawnable, source.transform.position + spawnData.positionOffset, spawnData.maxInstances);
+                        po.GetComponent<IHeadingLogic>().SetHeading(source.transform.position - target.position);
+                        break;
                 }
             }
         }

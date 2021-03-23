@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0b0502a316a2e4585323c63eb54a3e, type: 3}
   m_Name: PrimaryCannon
   m_EditorClassIdentifier: 
+  dispalyName: PrimaryCannon
   ability:
     myIDs:
     - {fileID: 11400000, guid: 040cff07f8641fd4eb57bd16ab44552c, type: 2}
     data: {fileID: 11400000, guid: 5b0ff784a82f5d3458d6a1e7005bd9b3, type: 2}
-    targetSet: []

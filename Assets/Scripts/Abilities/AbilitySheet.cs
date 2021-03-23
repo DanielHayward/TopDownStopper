@@ -7,9 +7,9 @@ namespace DKH
 {
     public class AbilitySheet : MonoBehaviour, ISourceUser
     {
-        public List<Ability> abilities = new List<Ability>();
-        private StatSheet statSheet = null;
         private GameObject source;
+        private StatSheet statSheet = null;
+        public List<Ability> abilities = new List<Ability>();
 
         public void SetSource(GameObject source)
         {
@@ -32,46 +32,69 @@ namespace DKH
 
         public void UseAbility(int abilityIndex, Vector2 inputVector, int stage = 0, float duration = 0)
         {
-            if (statSheet.CanAfford(abilities[abilityIndex].data.mySkillData[0].cost))
+            if(Time.time > abilities[abilityIndex].cooldownTimer)
             {
-                if (abilities[abilityIndex].Use(inputVector, stage, duration))
+                abilities[abilityIndex].cooldownTimer = Time.time + abilities[abilityIndex].data.cooldownPeroid; 
+                if (statSheet.CanAfford(abilities[abilityIndex].data.mySkillData[0].cost))
                 {
-                    statSheet.SpendAmount(abilities[abilityIndex].data.mySkillData[0].cost);
+                    if (abilities[abilityIndex].FindTargets(abilities[abilityIndex].data.maxTargets))
+                    {
+                        if (abilities[abilityIndex].Use(inputVector, stage, duration))
+                        {
+                            statSheet.SpendAmount(abilities[abilityIndex].data.mySkillData[0].cost);
+                        }
+                    }
                 }
             }
+
         }
         public void UseAbility(Ability ability, Vector2 inputVector, int stage = 0, float duration = 0)
         {
-            if (statSheet.CanAfford(ability.data.mySkillData[0].cost))
+            if (Time.time > ability.cooldownTimer)
             {
-                if (ability.Use(inputVector, stage, duration))
+                ability.cooldownTimer = Time.time + ability.data.cooldownPeroid;
+                if (statSheet.CanAfford(ability.data.mySkillData[0].cost))
                 {
-                    statSheet.SpendAmount(ability.data.mySkillData[0].cost);
+                    if (ability.FindTargets(ability.data.maxTargets))
+                    {
+                        if (ability.Use(inputVector, stage, duration))
+                        {
+                            statSheet.SpendAmount(ability.data.mySkillData[0].cost);
+                        }
+                    }
                 }
             }
         }
         public void UseAbility(List<GameObject> targets, int abilityIndex, Vector2 inputVector, int stage = 0, float duration = 0)
         {
-            if (statSheet.CanAfford(abilities[abilityIndex].data.mySkillData[0].cost))
+            if (Time.time > abilities[abilityIndex].cooldownTimer)
             {
-                if (abilities[abilityIndex].SetTargets(targets))
+                abilities[abilityIndex].cooldownTimer = Time.time + abilities[abilityIndex].data.cooldownPeroid;
+                if (statSheet.CanAfford(abilities[abilityIndex].data.mySkillData[0].cost))
                 {
-                    if (abilities[abilityIndex].Use(inputVector, stage, duration))
+                    if (abilities[abilityIndex].SetTargets(targets))
                     {
-                        statSheet.SpendAmount(abilities[abilityIndex].data.mySkillData[0].cost);
+                        if (abilities[abilityIndex].Use(inputVector, stage, duration))
+                        {
+                            statSheet.SpendAmount(abilities[abilityIndex].data.mySkillData[0].cost);
+                        }
                     }
                 }
             }
         }
         public void UseAbility(Vector3[] locations, Ability ability, Vector2 inputVector, int stage = 0, float duration = 0)
         {
-            if (statSheet.CanAfford(ability.data.mySkillData[0].cost))
+            if (Time.time > ability.cooldownTimer)
             {
-                if (ability.SetTargets(locations))
+                ability.cooldownTimer = Time.time + ability.data.cooldownPeroid;
+                if (statSheet.CanAfford(ability.data.mySkillData[0].cost))
                 {
-                    if (ability.Use(inputVector, stage, duration))
+                    if (ability.SetTargets(locations))
                     {
-                        statSheet.SpendAmount(ability.data.mySkillData[0].cost);
+                        if (ability.Use(inputVector, stage, duration))
+                        {
+                            statSheet.SpendAmount(ability.data.mySkillData[0].cost);
+                        }
                     }
                 }
             }

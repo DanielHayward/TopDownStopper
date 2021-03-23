@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 2654381623520633013}
   - component: {fileID: 2654381623520633014}
   - component: {fileID: 2654381623520633015}
-  - component: {fileID: 2654381623520633012}
   m_Layer: 0
   m_Name: Cannon
   m_TagString: Untagged
@@ -73,22 +72,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 727ecee71993ddf4cac8675b3dbf5c25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targeter: {fileID: 2654381623520633012}
+  targeterID: {fileID: 0}
   targetLayers:
     serializedVersion: 2
     m_Bits: 1
   checkDistance: 10
   interationDuration: 0.2
---- !u!114 &2654381623520633012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2654381623520633019}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc59470226d6bc744b81bf15217f784a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offset: {x: 0, y: 0, z: 0}

@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiSprite: {fileID: 0}
   cost: []
-  commandDatas:
+  cooldownPeroid: 1
+  maxDistance: 20
+  commandData:
   - {fileID: 11400000, guid: c6dd3501c5a221a409b9b84dc845cc62, type: 2}

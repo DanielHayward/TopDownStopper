@@ -15,9 +15,11 @@ MonoBehaviour:
   mySkillData:
   - {fileID: 11400000, guid: eb1b55e11fcff04418e4c091aeb7392a, type: 2}
   targetingType: 2
+  cooldownPeroid: 1
   setID: {fileID: 0}
   targeterID: {fileID: 0}
   targetMask:
     serializedVersion: 2
     m_Bits: 1
+  maxTargets: 3
   maxDistance: 10

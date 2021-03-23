@@ -18,5 +18,5 @@ MonoBehaviour:
   spawnable: {fileID: 11400000, guid: 136ce1af59da3574c9d20197a189c466, type: 2}
   maxInstances: 9999
   positionOffset: {x: 0, y: 0, z: 0}
-  directionBasedOnHeading: 1
   offsetBasedOnHeading: 0
+  spawnType: 1

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace DKH
@@ -8,54 +9,72 @@ namespace DKH
     {
         public Sprite uiSprite;
         public ResourceStatAmount[] cost;
-        public float cooldownPeroid = 0;
-        public CommandDataSO[] commandDatas;
+        public float maxDistance = 0;
+        public CommandDataSO[] commandData;
         //Buffed By Values
 
         public virtual Skill GetSkill(GameObject source)
         {
-            return new Skill(source, commandDatas);
+            return new Skill(source, this);
         }
     }
 
     public class Skill : ITargetUser
     {
         private GameObject source;
-        private CommandDataSO[] commandData;
+        private SkillSO data;
         private List<Command> commands = new List<Command>();
 
-        public Skill(GameObject source, CommandDataSO[] commandData)
+        public Skill(GameObject source, SkillSO commandData)
         {
             this.source = source;
-            this.commandData = commandData;
+            this.data = commandData;
+        }
+        public bool InRange(Vector3 location)
+        {
+            if (data.maxDistance > (location - source.transform.position).magnitude)
+            {
+                return true;
+            }
+            return false;
         }
         public void SetTarget(GameObject target)
         {
             ClearTargets();
-            for (int commandIndex = 0; commandIndex < commandData.Length; commandIndex++)
+            if(InRange(target.transform.position))
             {
-                commands.Add(commandData[commandIndex].GetCommand(source, target));
+                for (int commandIndex = 0; commandIndex < data.commandData.Length; commandIndex++)
+                {
+                    commands.Add(data.commandData[commandIndex].GetCommand(source, target));
+                }
             }
+
         }
         public void SetTargets(List<GameObject> targets)
         {
             ClearTargets();
-            for (int commandIndex = 0; commandIndex < commandData.Length; commandIndex++)
+            for (int targetIndex = 0; targetIndex < targets.Count; targetIndex++)
             {
-                for (int targetIndex = 0; targetIndex < targets.Count; targetIndex++)
+                if (InRange(targets[targetIndex].transform.position))
                 {
-                    commands.Add(commandData[commandIndex].GetCommand(source, targets[targetIndex]));
+                    for (int commandIndex = 0; commandIndex < data.commandData.Length; commandIndex++)
+                    {
+                        commands.Add(data.commandData[commandIndex].GetCommand(source, targets[targetIndex]));
+                    }
                 }
             }
         }
         public void SetTargets(Vector3[] locations)
         {
             ClearTargets();
-            for (int commandIndex = 0; commandIndex < commandData.Length; commandIndex++)
+            for (int targetIndex = 0; targetIndex < locations.Length; targetIndex++)
             {
-                for (int targetIndex = 0; targetIndex < locations.Length; targetIndex++)
+                if (InRange(locations[targetIndex]))
                 {
-                    commands.Add(commandData[commandIndex].GetCommand(source, locations[targetIndex]));
+                    for (int commandIndex = 0; commandIndex < data.commandData.Length; commandIndex++)
+                    {
+                        commands.Add(data.commandData[commandIndex].GetCommand(source, locations[targetIndex]));
+                    }
                 }
             }
         }

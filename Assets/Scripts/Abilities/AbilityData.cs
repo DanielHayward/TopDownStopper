@@ -9,11 +9,15 @@ namespace DKH
     {
         public SkillSO[] mySkillData;
         public AbilityTargetingTypes targetingType;
+        public float cooldownPeroid = 0;
         [Header("Target Set")]
         public IdSO setID;
         [Header("Targeter")]
         public IdSO targeterID;
         public LayerMask targetMask;
+        public int maxTargets = 1;
+
+        [Header("SourceToTarget")]
         public float maxDistance;
     }
 
@@ -29,15 +33,18 @@ namespace DKH
     [Serializable]
     public class Ability
     {
+        private GameObject source;
         public IdSO[] myIDs;
         private Skill[] mySkills;
         public AbilityData data;
 
         private List<GameObject> targetSet = new List<GameObject>();
         private Targeter targeter;
+        public float cooldownTimer = 0;
 
         public void SetSource(GameObject source)
         {
+            this.source = source;
             mySkills = new Skill[data.mySkillData.Length];
             for (int skillIndex = 0; skillIndex < data.mySkillData.Length; skillIndex++)
             {
@@ -53,7 +60,7 @@ namespace DKH
                 else if (data.targetingType == AbilityTargetingTypes.UseTargeter)
                 {
                     targeter = IdSO.FindComponents<Targeter>(source, data.targeterID)[0];
-                    //mySkills[skillIndex].SetTargets(targetSet);
+
                 }
             }
         }
@@ -76,10 +83,14 @@ namespace DKH
             return true;
         }
 
-        public bool Use(Vector2 inputVector, int stage = 0, float duration = 0)
+        public bool FindTargets(int maxTargets)
         {
             switch (data.targetingType)
             {
+                case AbilityTargetingTypes.TargetSelf:
+                    break;
+                case AbilityTargetingTypes.TargetStoredSet:
+                    break;
                 case AbilityTargetingTypes.UseTargeter:
                     Collider[] colliders = targeter.GetTargets(data.targetMask, data.maxDistance);
                     List<GameObject> targeterGOS = new List<GameObject>();
@@ -87,6 +98,9 @@ namespace DKH
                     {
                         targeterGOS.Add(colliders[i].gameObject);
                     }
+                    targeterGOS.Sort(SortByDistance);
+                    int min = Mathf.Min(maxTargets, colliders.Length);
+                    targeterGOS.RemoveRange(min, targeterGOS.Count - min);
 
                     for (int skillIndex = 0; skillIndex < data.mySkillData.Length; skillIndex++)
                     {
@@ -103,9 +117,29 @@ namespace DKH
                 default:
                     break;
             }
+            return true;
+        }
+
+        public int SortByDistance(GameObject obj1, GameObject obj2)
+        {
+            float distanceA = (obj1.transform.position - source.transform.position).magnitude;
+            float distanceB = (obj2.transform.position - source.transform.position).magnitude;
+
+            if(distanceA > distanceB)
+            {
+                return 1;
+            }
+            if(distanceA < distanceB)
+            {
+                return -1;
+            }
+            return 0;
+        }
+
+        public bool Use(Vector2 inputVector, int stage = 0, float duration = 0)
+        {
             for (int skillIndex = 0; skillIndex < mySkills.Length; skillIndex++)
             {
-
                 CalculateSkillBuffing();
                 mySkills[skillIndex].UseSkill(stage, duration, inputVector);
             }
