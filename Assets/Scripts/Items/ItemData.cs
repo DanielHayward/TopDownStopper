@@ -6,46 +6,22 @@ namespace DKH
     [CreateAssetMenu (menuName ="ScriptableObjects/Items/Misc")]
     public class ItemData : ScriptableObject
     {
-        //Resource Stat Buy/Sell Values
+        public int worth;
         
         public virtual Item GetItem()
         {
-            return new Item();
+            return new Item(this);
         }
     }
 
     [Serializable]
     public class Item
     {
-
-    }
-
-    public class Consumeable : Item
-    {
-        private SkillSO skills;
-        public void Use()
+        protected ItemData itemData;
+        public Item(ItemData data)
         {
-            //skills.Use();
+            itemData = data;
         }
     }
 
-    [Serializable]
-    public class Equipment : Item
-    {
-        private AbilitySheet source;
-        public EquipmentData data;
-
-        public void SetSource(AbilitySheet source)
-        {
-            this.source = source;
-        }
-        public void Equip()
-        {
-            source.AddAbility(data.ability);
-        }
-        public void Dequip()
-        {
-            source.RemoveAbility(data.ability);
-        }
-    }
 }

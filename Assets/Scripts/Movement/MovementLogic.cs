@@ -18,6 +18,7 @@ namespace DKH
         private void FixedUpdate()
         {
             ApplyLimits();
+            Debug.Log(velocity);
             mover.Move(velocity * Time.deltaTime);
             Velocity = velocity;
             velocity = Vector3.zero;

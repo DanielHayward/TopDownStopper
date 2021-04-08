@@ -115,7 +115,7 @@ namespace DKH
     public class EquipmentItems : InventoryGroup
     {
         private Inventory inventory;
-        public List<Equipment> equipment = new List<Equipment>();
+        public List<Equippable> equipment = new List<Equippable>();
         private bool equipped = false;
 
         public void Use(int index)

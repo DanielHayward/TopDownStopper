@@ -12,4 +12,5 @@ EditorBuildSettings:
     path: Assets/Joystick Pack/Examples/Example Scene.unity
     guid: 414bddd31c5ea4f4c9f5d1452e5bbb41
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 3b8ce077d9287dc4ea58435895e09df2, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 04aacd0e56b27bf4c98fd06781cf37d5, type: 2}
